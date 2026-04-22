@@ -1,0 +1,285 @@
+{
+	"info": {
+		"_postman_id": "student-management-api",
+		"name": "Student Management API",
+		"description": "Postman collection for Student Management microservice APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Student",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"studentName\": \"Alice Johnson\",\n    \"studentId\": \"STU009\",\n    \"grade\": \"Grade 10\",\n    \"mobileNumber\": \"+1234567898\",\n    \"schoolName\": \"Springfield High School\",\n    \"active\": true\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students"
+					]
+				},
+				"description": "Create a new student in the system"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Students",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students"
+					]
+				},
+				"description": "Retrieve all students from the system"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Student by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students",
+						"1"
+					]
+				},
+				"description": "Get a specific student by database ID"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Student by Student ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students/by-student-id/STU001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students",
+						"by-student-id",
+						"STU001"
+					]
+				},
+				"description": "Get a specific student by student ID"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Student",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"studentName\": \"John Doe Updated\",\n    \"studentId\": \"STU001\",\n    \"grade\": \"Grade 11\",\n    \"mobileNumber\": \"+1234567890\",\n    \"schoolName\": \"Springfield High School\",\n    \"active\": true\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students",
+						"1"
+					]
+				},
+				"description": "Update an existing student's information"
+			},
+			"response": []
+		},
+		{
+			"name": "Deactivate Student",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students/1/deactivate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students",
+						"1",
+						"deactivate"
+					]
+				},
+				"description": "Deactivate a student (soft delete)"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Student",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students",
+						"2"
+					]
+				},
+				"description": "Delete a student from the system"
+			},
+			"response": []
+		},
+		{
+			"name": "Search Students",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students/search?search=John",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students",
+						"search"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "John"
+						}
+					]
+				},
+				"description": "Search students by name, ID, or mobile number"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Students by Grade",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students/by-grade/Grade%2010",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students",
+						"by-grade",
+						"Grade 10"
+					]
+				},
+				"description": "Get all students in a specific grade"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Active Students",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/students/active",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"students",
+						"active"
+					]
+				},
+				"description": "Get all active students"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
