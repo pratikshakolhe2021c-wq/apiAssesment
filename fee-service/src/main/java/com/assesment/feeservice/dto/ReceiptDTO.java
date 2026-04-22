@@ -1,8 +1,8 @@
-package com.assesment.apiAssesment.Fee.dto;
+package com.assesment.feeservice.dto;
 
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,54 +18,38 @@ public class ReceiptDTO {
     private Long id;
     
     @NotBlank(message = "Receipt number is required")
+    @Size(max = 50, message = "Receipt number must not exceed 50 characters")
     private String receiptNumber;
     
     @NotNull(message = "Student ID is required")
     private Long studentId;
     
-    @NotBlank(message = "Student name is required")
     private String studentName;
     
+    @NotBlank(message = "Academic year is required")
+    @Size(max = 20, message = "Academic year must not exceed 20 characters")
+    private String academicYear;
+    
     @NotBlank(message = "Fee type is required")
+    @Size(max = 50, message = "Fee type must not exceed 50 characters")
     private String feeType;
     
     @NotNull(message = "Amount is required")
-    @DecimalMin(value = "0.01", message = "Amount must be greater than 0")
     private BigDecimal amount;
+    
+    @NotBlank(message = "Payment method is required")
+    @Size(max = 50, message = "Payment method must not exceed 50 characters")
+    private String paymentMethod;
+    
+    @Size(max = 100, message = "Transaction ID must not exceed 100 characters")
+    private String transactionId;
     
     private LocalDateTime paymentDate;
     
-    @NotBlank(message = "Payment method is required")
-    private String paymentMethod;
-    
-    private String transactionId;
-    
-    private String referenceNumber;
-    
-    private String cardNumber;
-    
-    private String cardType;
-    
-    private String schoolName;
-    
-    private String gradeLevel;
-    
-    private Integer quantity;
-    
-    private BigDecimal unitPrice;
-    
-    private BigDecimal customAmount;
-    
-    @NotBlank(message = "Academic year is required")
-    private String academicYear;
-    
-    private String month;
-    
-    private String quarter;
-    
-    private String remarks;
+    @Size(max = 500, message = "Notes must not exceed 500 characters")
+    private String notes;
     
     private LocalDateTime createdAt;
     
-    private String createdBy;
+    private LocalDateTime updatedAt;
 }

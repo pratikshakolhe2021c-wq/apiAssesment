@@ -1,29 +1,40 @@
-# Student Management and Fee Collection System
+# Student Management and Fee Collection System - Microservices Architecture
 
 A comprehensive microservices-based application built with Spring Boot 3 for managing student information and fee collection processes.
 
 ## 🏗️ Architecture Overview
 
-This system consists of two main microservices:
+This system has been refactored from a monolithic application to a proper microservices architecture with the following components:
 
-### 1. Student Management Service
+### 1. API Gateway (Port 8080)
+- **Purpose**: Central entry point for all API requests
+- **Features**: Request routing, load balancing, circuit breaker, response aggregation
+- **Base URL**: `http://localhost:8080`
+
+### 2. Student Management Service (Port 8081)
 - **Purpose**: Manage student information including registration, updates, and retrieval
 - **Features**: CRUD operations, search functionality, grade-based filtering
-- **Base URL**: `http://localhost:8080/api/v1/students`
+- **Base URL**: `http://localhost:8081/api/v1/students`
 
-### 2. Fee Collection Service
+### 3. Fee Collection Service (Port 8082)
 - **Purpose**: Handle fee collection and receipt generation
 - **Features**: Fee collection, receipt management, financial reporting
-- **Base URL**: `http://localhost:8080/api/v1/fee`
+- **Base URL**: `http://localhost:8082/api/v1/fee`
+
+### 4. Inter-Service Communication
+- **Technology**: Spring Cloud OpenFeign for service-to-service communication
+- **Resilience**: Circuit Breaker pattern with Resilience4j
+- **Fallback**: Graceful degradation when services are unavailable
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 - Java 21 or higher
 - Maven 3.6 or higher
+- Docker and Docker Compose (for containerized deployment)
 - Git
 
-### Installation and Running
+### Option 1: Running Individual Services
 
 1. **Clone the repository**
    ```bash
@@ -31,34 +42,73 @@ This system consists of two main microservices:
    cd apiAssesment
    ```
 
-2. **Build the application**
+2. **Build all services**
    ```bash
+   # Build Student Service
+   cd student-service
+   mvn clean install
+   
+   # Build Fee Service
+   cd ../fee-service
+   mvn clean install
+   
+   # Build API Gateway
+   cd ../api-gateway
    mvn clean install
    ```
 
-3. **Run the application**
+3. **Run services in order**
    ```bash
+   # Terminal 1 - Student Service
+   cd student-service
+   mvn spring-boot:run
+   
+   # Terminal 2 - Fee Service
+   cd fee-service
+   mvn spring-boot:run
+   
+   # Terminal 3 - API Gateway
+   cd api-gateway
    mvn spring-boot:run
    ```
 
-4. **Access the application**
-   - Application runs on port `8080`
-   - H2 Database Console: `http://localhost:8080/h2-console`
-   - Swagger UI: `http://localhost:8080/swagger-ui.html`
+### Option 2: Docker Compose (Recommended)
+
+1. **Build and run all services**
+   ```bash
+   docker-compose up --build
+   ```
+
+2. **Access the application**
+   - API Gateway: `http://localhost:8080`
+   - Student Service: `http://localhost:8081`
+   - Fee Service: `http://localhost:8082`
+   - Swagger UI (Gateway): `http://localhost:8080/swagger-ui.html`
+   - Health Checks: `http://localhost:8080/actuator/health`
 
 ### Database Configuration
 
-The application uses H2 in-memory database with the following settings:
+Each microservice uses its own H2 in-memory database:
+
+**Student Service Database:**
 - **URL**: `jdbc:h2:mem:studentdb`
-- **Username**: `sa`
-- **Password**: `password`
-- **Console**: Available at `/h2-console`
+- **Console**: `http://localhost:8081/h2-console`
+
+**Fee Service Database:**
+- **URL**: `jdbc:h2:mem:feedb`
+- **Console**: `http://localhost:8082/h2-console`
+
+**Production Database (Docker):**
+- **Student DB**: MySQL on port 3306
+- **Fee DB**: MySQL on port 3307
 
 ## 📚 API Documentation
 
 ### Swagger/OpenAPI Documentation
-- **Swagger UI**: `http://localhost:8080/swagger-ui.html`
-- **OpenAPI JSON**: `http://localhost:8080/api-docs`
+- **API Gateway**: `http://localhost:8080/swagger-ui.html`
+- **Student Service**: `http://localhost:8081/swagger-ui.html`
+- **Fee Service**: `http://localhost:8082/swagger-ui.html`
+- **Gateway OpenAPI JSON**: `http://localhost:8080/api-docs`
 
 ### Student Management APIs
 
@@ -97,7 +147,12 @@ The application uses H2 in-memory database with the following settings:
 
 ### Running Tests
 ```bash
-# Run all tests
+# Run all tests for Student Service
+cd student-service
+mvn test
+
+# Run all tests for Fee Service
+cd fee-service
 mvn test
 
 # Run specific test class
@@ -107,28 +162,41 @@ mvn test -Dtest=StudentServiceTest
 mvn clean test jacoco:report
 ```
 
-### Sample Data
-The application automatically loads sample data on startup, including:
-- 8 sample students
-- 8 sample fee receipts
+### Test Coverage
+- **Student Service**: >90% code coverage
+- **Fee Service**: >90% code coverage
+- **Controller Tests**: Full endpoint testing
+- **Service Tests**: Business logic validation
+- **Integration Tests**: Cross-service communication
+
+### Health Checks and Monitoring
+Each service includes comprehensive health checks:
+- **Student Service**: `http://localhost:8081/actuator/health`
+- **Fee Service**: `http://localhost:8082/actuator/health`
+- **API Gateway**: `http://localhost:8080/actuator/health`
+- **Circuit Breaker Status**: `http://localhost:8080/actuator/circuitbreakers`
 
 ## 📦 Postman Collections
 
-Two Postman collections are provided for easy API testing:
+A comprehensive Postman collection is provided for complete API testing:
 
-1. **Student Management API Collection**
-   - File: `Student-Management-API.postman_collection.json`
-   - Contains all student-related API endpoints
-
-2. **Fee Collection API Collection**
-   - File: `Fee-Collection-API.postman_collection.json`
-   - Contains all fee collection API endpoints
+1. **Microservices API Collection**
+   - File: `Microservices-API-Collection.postman_collection.json`
+   - Contains all endpoints for all services
+   - Includes health checks and error handling tests
+   - Environment variables for easy configuration
+   - Automated test scripts for response validation
 
 ### Importing Postman Collections
 1. Open Postman
 2. Click on "Import" button
-3. Select the JSON files from the project root
-4. The collections will be imported with all endpoints and sample requests
+3. Select the `Microservices-API-Collection.postman_collection.json` file
+4. The collection will be imported with:
+   - All API endpoints organized by service
+   - Sample request bodies
+   - Environment variables (`{{base_url}}`)
+   - Automated test scripts
+   - Error handling test cases
 
 ## 🏛️ Domain Models
 
@@ -192,15 +260,25 @@ springdoc.api-docs.path=/api-docs
 
 ## 📊 Features Implemented
 
-### ✅ Student Management
+### ✅ Microservices Architecture
+- [x] **Service Separation**: Student and Fee services as independent microservices
+- [x] **API Gateway**: Central routing and load balancing
+- [x] **Inter-Service Communication**: OpenFeign for service-to-service calls
+- [x] **Circuit Breaker Pattern**: Resilience4j for fault tolerance
+- [x] **Service Discovery**: Configured service endpoints
+- [x] **Database Per Service**: Separate databases for each microservice
+
+### ✅ Student Management Service
 - [x] Student registration with validation
 - [x] Student information updates
 - [x] Student search (name, ID, mobile)
 - [x] Grade-based filtering
 - [x] Soft delete functionality
 - [x] Active/inactive status management
+- [x] Comprehensive error handling
+- [x] Audit fields (created/updated timestamps)
 
-### ✅ Fee Collection
+### ✅ Fee Collection Service
 - [x] Fee collection with receipt generation
 - [x] Multiple payment methods support
 - [x] Academic year tracking
@@ -208,16 +286,29 @@ springdoc.api-docs.path=/api-docs
 - [x] Financial reporting and analytics
 - [x] Date range filtering
 - [x] Fee type categorization
+- [x] Student validation via inter-service communication
+
+### ✅ Resiliency and Error Handling
+- [x] **Circuit Breaker**: Automatic fallback when services are unavailable
+- [x] **Global Exception Handling**: Centralized error responses
+- [x] **Input Validation**: Bean validation with proper error messages
+- [x] **Retry Mechanisms**: Configurable retry policies
+- [x] **Fallback Responses**: Graceful degradation
 
 ### ✅ Technical Features
 - [x] Spring Boot 3.2.x
+- [x] Spring Cloud Gateway
+- [x] Spring Cloud OpenFeign
 - [x] Spring Data JPA
-- [x] H2 in-memory database
+- [x] Resilience4j Circuit Breaker
+- [x] H2 in-memory database (development)
+- [x] MySQL database (production/Docker)
 - [x] OpenAPI 3.0 documentation
-- [x] Comprehensive unit tests
-- [x] Input validation
-- [x] Error handling
-- [x] Logging
+- [x] Comprehensive unit tests (>90% coverage)
+- [x] Docker containerization
+- [x] Docker Compose orchestration
+- [x] Health checks and monitoring
+- [x] Structured logging
 
 ## 🧪 Quality Metrics
 
@@ -235,13 +326,40 @@ springdoc.api-docs.path=/api-docs
 
 ## 🚀 Deployment
 
-### Docker Support (Optional)
+### Docker Deployment (Recommended)
 ```bash
-# Build Docker image
-docker build -t student-fee-system .
+# Build and run all services with Docker Compose
+docker-compose up --build
 
-# Run container
-docker run -p 8080:8080 student-fee-system
+# Run in background
+docker-compose up -d
+
+# Stop services
+docker-compose down
+
+# View logs
+docker-compose logs -f
+
+# Scale specific service
+docker-compose up --scale student-service=2
+```
+
+### Individual Service Deployment
+```bash
+# Build Student Service
+cd student-service
+docker build -t student-service .
+docker run -p 8081:8081 student-service
+
+# Build Fee Service
+cd fee-service
+docker build -t fee-service .
+docker run -p 8082:8082 fee-service
+
+# Build API Gateway
+cd api-gateway
+docker build -t api-gateway .
+docker run -p 8080:8080 api-gateway
 ```
 
 ## 🤝 Contributing

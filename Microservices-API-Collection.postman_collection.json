@@ -1,0 +1,520 @@
+{
+	"info": {
+		"_postman_id": "microservices-api-collection",
+		"name": "Microservices API Collection",
+		"description": "Comprehensive API collection for Student and Fee microservices with proper error handling and testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Student Service",
+			"item": [
+				{
+					"name": "Create Student",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"studentName\": \"John Doe\",\n  \"studentId\": \"STU001\",\n  \"grade\": \"10A\",\n  \"mobileNumber\": \"1234567890\",\n  \"schoolName\": \"ABC School\",\n  \"active\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/students",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "students"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Students",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/students",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "students"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Student by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/students/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "students", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Student by Student ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/students/by-student-id/STU001",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "students", "by-student-id", "STU001"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Student",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"studentName\": \"John Doe Updated\",\n  \"studentId\": \"STU001\",\n  \"grade\": \"10B\",\n  \"mobileNumber\": \"1234567890\",\n  \"schoolName\": \"ABC School\",\n  \"active\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/students/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "students", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deactivate Student",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/students/1/deactivate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "students", "1", "deactivate"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Student",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/students/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "students", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Students",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/students/search?search=John",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "students", "search"],
+							"query": [
+								{
+									"key": "search",
+									"value": "John"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Students by Grade",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/students/by-grade/10A",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "students", "by-grade", "10A"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Active Students",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/students/active",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "students", "active"]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Student management APIs"
+		},
+		{
+			"name": "Fee Service",
+			"item": [
+				{
+					"name": "Generate Receipt Number",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/fee/receipt-number/generate",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "fee", "receipt-number", "generate"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Collect Fee",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"receiptNumber\": \"RCP-12345678\",\n  \"studentId\": 1,\n  \"academicYear\": \"2023-24\",\n  \"feeType\": \"Tuition\",\n  \"amount\": 10000.00,\n  \"paymentMethod\": \"Cash\",\n  \"transactionId\": \"TXN123456\",\n  \"notes\": \"Monthly tuition fee\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/fee/collect",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "fee", "collect"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Receipts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/fee/receipts",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "fee", "receipts"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Receipt by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/fee/receipts/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "fee", "receipts", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Receipt by Receipt Number",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/fee/receipts/by-number/RCP-12345678",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "fee", "receipts", "by-number", "RCP-12345678"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Receipts by Student ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/fee/receipts/student/1",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "fee", "receipts", "student", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Receipts by Academic Year",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/fee/receipts/academic-year/2023-24",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "fee", "receipts", "academic-year", "2023-24"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Total Fees Paid by Student",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/fee/total/student/1/academic-year/2023-24",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "fee", "total", "student", "1", "academic-year", "2023-24"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Total Fees Collected",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/fee/total/academic-year/2023-24",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "fee", "total", "academic-year", "2023-24"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Receipts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/fee/receipts/search?search=John",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "fee", "receipts", "search"],
+							"query": [
+								{
+									"key": "search",
+									"value": "John"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Receipts by Date Range",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/fee/receipts/date-range?startDate=2023-01-01T00:00:00&endDate=2023-12-31T23:59:59",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "fee", "receipts", "date-range"],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2023-01-01T00:00:00"
+								},
+								{
+									"key": "endDate",
+									"value": "2023-12-31T23:59:59"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Receipts by Fee Type",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/fee/receipts/fee-type/Tuition",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "fee", "receipts", "fee-type", "Tuition"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Receipts by Payment Method",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/fee/receipts/payment-method/Cash",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "fee", "receipts", "payment-method", "Cash"]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Fee collection and receipt management APIs"
+		},
+		{
+			"name": "Health Checks",
+			"item": [
+				{
+					"name": "Student Service Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/actuator/health",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8081",
+							"path": ["actuator", "health"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fee Service Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/actuator/health",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8082",
+							"path": ["actuator", "health"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "API Gateway Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/actuator/health",
+							"protocol": "http",
+							"host": ["localhost"],
+							"port": "8080",
+							"path": ["actuator", "health"]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Service health check endpoints"
+		},
+		{
+			"name": "Error Handling Tests",
+			"item": [
+				{
+					"name": "Create Student - Invalid Data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"studentName\": \"\",\n  \"studentId\": \"\",\n  \"grade\": \"\",\n  \"mobileNumber\": \"\",\n  \"schoolName\": \"\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/students",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "students"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Student - Not Found",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/students/99999",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "students", "99999"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Collect Fee - Invalid Student",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"receiptNumber\": \"RCP-INVALID\",\n  \"studentId\": 99999,\n  \"academicYear\": \"2023-24\",\n  \"feeType\": \"Tuition\",\n  \"amount\": 10000.00,\n  \"paymentMethod\": \"Cash\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/fee/collect",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "fee", "collect"]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Test error handling and validation"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Auto-generate timestamp for requests",
+					"pm.globals.set(\"timestamp\", new Date().toISOString());"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Basic response validation",
+					"pm.test(\"Status code is successful\", function () {",
+					"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+					"});",
+					"",
+					"// Response time check",
+					"pm.test(\"Response time is less than 2000ms\", function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}

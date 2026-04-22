@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: jdbc:mysql://fee-db:3306/feedb?useSSL=false&allowPublicKeyRetrieval=true
+    username: feeuser
+    password: feepass
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  h2:
+    console:
+      enabled: false
+
+student-service:
+  url: http://student-service:8081
+
+feign:
+  client:
+    config:
+      student-service:
+        connectTimeout: 5000
+        readTimeout: 10000
+        loggerLevel: basic
+  circuitbreaker:
+    enabled: true
+
+logging:
+  level:
+    com.assesment.feeservice: INFO
+    com.assesment.feeservice.client: INFO
+    org.springframework.web: WARN
+    org.hibernate: WARN

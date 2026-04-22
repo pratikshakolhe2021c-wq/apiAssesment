@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  student-service:
+    build:
+      context: ./student-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - microservices-network
+    depends_on:
+      - student-db
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  fee-service:
+    build:
+      context: ./fee-service
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - STUDENT_SERVICE_URL=http://student-service:8081
+    networks:
+      - microservices-network
+    depends_on:
+      - fee-db
+      - student-service
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8082/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - microservices-network
+    depends_on:
+      - student-service
+      - fee-service
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  student-db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: studentdb
+      MYSQL_USER: studentuser
+      MYSQL_PASSWORD: studentpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - student-data:/var/lib/mysql
+    networks:
+      - microservices-network
+
+  fee-db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: feedb
+      MYSQL_USER: feeuser
+      MYSQL_PASSWORD: feepass
+    ports:
+      - "3307:3306"
+    volumes:
+      - fee-data:/var/lib/mysql
+    networks:
+      - microservices-network
+
+volumes:
+  student-data:
+  fee-data:
+
+networks:
+  microservices-network:
+    driver: bridge

@@ -1,0 +1,31 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: student-service
+          uri: http://student-service:8081
+          predicates:
+            - Path=/api/v1/students/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: studentService
+                fallbackUri: forward:/fallback/students
+        - id: fee-service
+          uri: http://fee-service:8082
+          predicates:
+            - Path=/api/v1/fee/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: feeService
+                fallbackUri: forward:/fallback/fee
+      default-filters:
+        - AddResponseHeader=X-Response-Time, ${T(java.time.Instant).now().toString()}
+        - AddResponseHeader=Gateway, API-Gateway
+
+logging:
+  level:
+    com.assesment.apigateway: INFO
+    org.springframework.cloud.gateway: INFO
+    org.springframework.web.reactive: WARN
