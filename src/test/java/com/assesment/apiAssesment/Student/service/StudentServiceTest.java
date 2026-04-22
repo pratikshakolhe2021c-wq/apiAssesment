@@ -116,7 +116,6 @@ class StudentServiceTest {
     @Test
     void updateStudent_ShouldReturnUpdatedStudentDTO_WhenStudentExists() {
         when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
-        when(studentRepository.existsByStudentId("STU001")).thenReturn(true);
         when(studentRepository.save(any(Student.class))).thenReturn(student);
 
         StudentDTO result = studentService.updateStudent(1L, studentDTO);

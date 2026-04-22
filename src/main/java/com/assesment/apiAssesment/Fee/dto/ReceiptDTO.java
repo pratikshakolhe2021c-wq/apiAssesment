@@ -40,6 +40,22 @@ public class ReceiptDTO {
     
     private String transactionId;
     
+    private String referenceNumber;
+    
+    private String cardNumber;
+    
+    private String cardType;
+    
+    private String schoolName;
+    
+    private String gradeLevel;
+    
+    private Integer quantity;
+    
+    private BigDecimal unitPrice;
+    
+    private BigDecimal customAmount;
+    
     @NotBlank(message = "Academic year is required")
     private String academicYear;
     

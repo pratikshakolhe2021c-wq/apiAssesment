@@ -54,11 +54,35 @@ public class Receipt {
     @Column(name = "transaction_id")
     private String transactionId;
     
+    @Column(name = "reference_number")
+    private String referenceNumber;
+    
+    @Column(name = "card_number")
+    private String cardNumber;
+    
+    @Column(name = "card_type")
+    private String cardType;
+    
+    @Column(name = "school_name")
+    private String schoolName;
+    
+    @Column(name = "grade_level")
+    private String gradeLevel;
+    
+    @Column(name = "quantity")
+    private Integer quantity;
+    
+    @Column(name = "unit_price")
+    private BigDecimal unitPrice;
+    
+    @Column(name = "custom_amount")
+    private BigDecimal customAmount;
+    
     @NotBlank(message = "Academic year is required")
     @Column(name = "academic_year", nullable = false)
     private String academicYear;
     
-    @Column(name = "month")
+    @Column(name = "fee_month")
     private String month;
     
     @Column(name = "quarter")
