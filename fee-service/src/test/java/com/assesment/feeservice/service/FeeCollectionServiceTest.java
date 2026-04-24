@@ -94,12 +94,11 @@ class FeeCollectionServiceTest {
         studentDTO.setMobileNumber("1234567890");
         studentDTO.setSchoolName("ABC School");
         studentDTO.setActive(true);
-        
-        when(circuitBreakerFactory.create(anyString())).thenReturn(circuitBreaker);
     }
     
     @Test
     void collectFee_ShouldReturnReceiptDTO_WhenValidInput() {
+        when(circuitBreakerFactory.create(anyString())).thenReturn(circuitBreaker);
         when(receiptRepository.existsByReceiptNumber("RCP-12345678")).thenReturn(false);
         when(circuitBreaker.run(any(), any())).thenReturn(studentDTO);
         when(receiptMapper.toEntity(receiptDTO)).thenReturn(receipt);
@@ -124,6 +123,7 @@ class FeeCollectionServiceTest {
     
     @Test
     void collectFee_ShouldThrowException_WhenStudentNotFound() {
+        when(circuitBreakerFactory.create(anyString())).thenReturn(circuitBreaker);
         when(receiptRepository.existsByReceiptNumber("RCP-12345678")).thenReturn(false);
         when(circuitBreaker.run(any(), any())).thenThrow(new StudentNotFoundException("Student not found"));
         

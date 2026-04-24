@@ -130,7 +130,17 @@ class StudentControllerTest {
     
     @Test
     void deactivateStudent_ShouldReturnDeactivatedStudent_WhenStudentExists() throws Exception {
-        when(studentService.deactivateStudent(1L)).thenReturn(studentDTO);
+        StudentDTO deactivatedStudentDTO = new StudentDTO();
+        deactivatedStudentDTO.setId(1L);
+        deactivatedStudentDTO.setStudentName("John Doe");
+        deactivatedStudentDTO.setStudentId("STU001");
+        deactivatedStudentDTO.setGrade("10A");
+        deactivatedStudentDTO.setMobileNumber("1234567890");
+        deactivatedStudentDTO.setSchoolName("ABC School");
+        deactivatedStudentDTO.setActive(false);
+        deactivatedStudentDTO.setCreatedAt(LocalDateTime.now());
+        
+        when(studentService.deactivateStudent(1L)).thenReturn(deactivatedStudentDTO);
         
         mockMvc.perform(patch("/api/v1/students/1/deactivate"))
                 .andExpect(status().isOk())

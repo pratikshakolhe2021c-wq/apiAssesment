@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: 8085
 
 spring:
   application:
@@ -20,7 +20,7 @@ spring:
       path: /h2-console
 
 student-service:
-  url: http://localhost:8081
+  url: http://localhost:8083
 
 feign:
   client:

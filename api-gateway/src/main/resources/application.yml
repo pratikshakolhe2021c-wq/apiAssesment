@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8084
 
 spring:
   application:
@@ -8,26 +8,13 @@ spring:
     gateway:
       routes:
         - id: student-service
-          uri: http://localhost:8081
+          uri: http://localhost:8083
           predicates:
             - Path=/api/v1/students/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: studentService
-                fallbackUri: forward:/fallback/students
         - id: fee-service
-          uri: http://localhost:8082
+          uri: http://localhost:8085
           predicates:
             - Path=/api/v1/fee/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: feeService
-                fallbackUri: forward:/fallback/fee
-      default-filters:
-        - AddResponseHeader=X-Response-Time, ${T(java.time.Instant).now().toString()}
-        - AddResponseHeader=Gateway, API-Gateway
 
 management:
   endpoints:
