@@ -46,6 +46,7 @@ public class StudentController {
     })
     public ResponseEntity<List<StudentDTO>> getAllStudents() {
         log.info("REST request to get all students");
+
         List<StudentDTO> students = studentService.getAllStudents();
         return ResponseEntity.ok(students);
     }

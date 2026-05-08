@@ -7,6 +7,9 @@ import com.assesment.feeservice.entity.Receipt;
 import com.assesment.feeservice.exception.*;
 import com.assesment.feeservice.mapper.ReceiptMapper;
 import com.assesment.feeservice.repository.ReceiptRepository;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Retryable;
+import org.springframework.retry.annotation.Backoff;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
@@ -31,6 +34,11 @@ public class FeeCollectionService {
     private final StudentServiceClient studentServiceClient;
     private final CircuitBreakerFactory circuitBreakerFactory;
     
+    @Retryable(
+        value = {ObjectOptimisticLockingFailureException.class, ConcurrentModificationException.class},
+        maxAttempts = 3,
+        backoff = @Backoff(delay = 100, multiplier = 2)
+    )
     @Transactional
     public ReceiptDTO collectFee(ReceiptDTO receiptDTO) {
         log.info("Collecting fee for student ID: {}", receiptDTO.getStudentId());
@@ -50,17 +58,28 @@ public class FeeCollectionService {
             }
         );
         
+        // Validate student is active
+        if (!student.getActive()) {
+            throw new StudentInactiveException(
+                "Cannot collect fee for inactive student with ID: " + receiptDTO.getStudentId());
+        }
+        
         receiptDTO.setStudentName(student.getStudentName());
         
         if (receiptDTO.getPaymentDate() == null) {
             receiptDTO.setPaymentDate(LocalDateTime.now());
         }
         
-        Receipt receipt = receiptMapper.toEntity(receiptDTO);
-        Receipt savedReceipt = receiptRepository.save(receipt);
-        
-        log.info("Successfully collected fee with receipt ID: {}", savedReceipt.getId());
-        return receiptMapper.toDTO(savedReceipt);
+        try {
+            Receipt receipt = receiptMapper.toEntity(receiptDTO);
+            Receipt savedReceipt = receiptRepository.save(receipt);
+            
+            log.info("Successfully collected fee with receipt ID: {}", savedReceipt.getId());
+            return receiptMapper.toDTO(savedReceipt);
+        } catch (ObjectOptimisticLockingFailureException ex) {
+            log.error("Optimistic lock failure while collecting fee for student ID: {}", receiptDTO.getStudentId(), ex);
+            throw ex; // Will be handled by @Retryable
+        }
     }
     
     public List<ReceiptDTO> getAllReceipts() {

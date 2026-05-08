@@ -2,6 +2,7 @@ package com.assesment.feeservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JCircuitBreakerFactory;
 import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigBuilder;
 import org.springframework.cloud.client.circuitbreaker.Customizer;
@@ -14,6 +15,7 @@ import java.time.Duration;
 
 @SpringBootApplication
 @EnableFeignClients
+@EnableScheduling
 public class FeeServiceApplication {
 
     public static void main(String[] args) {

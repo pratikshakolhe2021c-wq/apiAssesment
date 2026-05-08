@@ -2,6 +2,7 @@ package com.assesment.feeservice.repository;
 
 import com.assesment.feeservice.entity.Receipt;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -42,4 +43,14 @@ public interface ReceiptRepository extends JpaRepository<Receipt, Long> {
            "LOWER(r.studentName) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
            "LOWER(r.transactionId) LIKE LOWER(CONCAT('%', :search, '%'))")
     List<Receipt> searchReceipts(@Param("search") String search);
+    
+    @Modifying
+    @Query("UPDATE Receipt r SET r.studentName = :newName WHERE r.studentId = :studentId")
+    int updateStudentName(@Param("studentId") Long studentId, @Param("newName") String newName);
+    
+    @Query("SELECT COUNT(r) FROM Receipt r WHERE r.studentId = :studentId")
+    long countByStudentId(@Param("studentId") Long studentId);
+    
+    @Query("SELECT r FROM Receipt r WHERE r.paymentDate >= :cutoffDate")
+    List<Receipt> findRecentReceipts(@Param("cutoffDate") java.time.LocalDateTime cutoffDate);
 }

@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import jakarta.persistence.Version;
 
 import java.time.LocalDateTime;
 
@@ -22,6 +23,9 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Version
+    private Long version;
     
     @NotBlank(message = "Student name is required")
     @Size(max = 100, message = "Student name must not exceed 100 characters")
